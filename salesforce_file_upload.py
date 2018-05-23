@@ -94,7 +94,9 @@ def main():
     logger.info('Directory to find files for Salesforce upload: {}'.format(path_to_files))
 
     for upload in os.listdir(path_to_files):
+        logger.info('================================')
         sf_driver.sf_upload_driver(os.path.join(path_to_files, upload), upload)
+        logger.info('================================')
 
 
 if __name__ == "__main__":
