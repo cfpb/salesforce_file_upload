@@ -37,8 +37,9 @@ class SFDCFileUpload(object):
         end = time.time()
         duration = end - start
 
-        logger.info("Successfully uploaded file '{}' to SalesForce".format(file_name))
-        logger.info("Total file upload time: {} seconds".format(duration))
+        logger.info("Successfully uploaded file '{}' to SalesForce - upload duration {} "
+                    "seconds".format(file_name, duration))
+
         self.delete_file_from_disk(file_path)
 
     def delete_file_from_disk(self, file_path):
