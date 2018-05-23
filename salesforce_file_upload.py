@@ -26,18 +26,19 @@ class SFDCFileUpload(object):
                                                          password=config.SALESFORCE['password'],
                                                          domain=config.SALESFORCE['domain'])
 
-        logger.info('session_id={}, instance={}'.format(self.session_id, self.instance))
+        logger.debug('session_id={}, instance={}'.format(self.session_id, self.instance))
 
     def sf_upload_driver(self, file_path, file_name):
 
         start = time.time()
+
         self.upload_file_request(file_path, file_name)
 
         end = time.time()
         duration = end - start
 
-        logger.info("Successfully uploaded File to SalesForce")
-        logger.info("SalesForce File Upload: {} --Elapsed Time in Seconds".format(duration))
+        logger.info("Successfully uploaded file '{}' to SalesForce".format(file_name))
+        logger.info("Total file upload time: {} seconds".format(duration))
         self.delete_file_from_disk(file_path)
 
     def delete_file_from_disk(self, file_path):
@@ -49,7 +50,7 @@ class SFDCFileUpload(object):
             raise e
 
     def metadata_request(self, file_name):
-        # Use this function if you need to upload file metadata to another Salesforce object
+        # Use this function if you need to upload file metadata to another Salesforce object, add it to the driver
 
         pass
 
@@ -66,7 +67,7 @@ class SFDCFileUpload(object):
             data = json.dumps({
                 'Title': file_name,
                 'PathOnClient': file_name,
-                'VersionData': file_body
+                'VersionData': file_body.decode('ascii')
             })
 
             response = requests.post(url, headers=headers, data=data)
@@ -91,11 +92,6 @@ def main():
 
     path_to_files = config.FILE_INFO['source_directory']
     logger.info('Directory to find files for Salesforce upload: {}'.format(path_to_files))
-
-    # for root, dir, files in os.walk(path_to_files):
-    #     if dir == config.FILE_INFO['folder_to_search']:
-    #         for upload in files:
-    #             sf_driver.sf_upload_driver(os.path.join(path_to_files, upload), upload)
 
     for upload in os.listdir(path_to_files):
         sf_driver.sf_upload_driver(os.path.join(path_to_files, upload), upload)
