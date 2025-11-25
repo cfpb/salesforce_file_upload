@@ -1,5 +1,7 @@
 #### CFPB Open Source Project Template Instructions
 
+This project is archived and no longer maintained.
+
 1. Create a new project.
 2. [Copy these files into the new project](#installation)
 3. Update the README, replacing the contents below as prescribed.
